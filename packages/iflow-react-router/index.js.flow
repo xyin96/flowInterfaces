@@ -1,13 +1,50 @@
 import React from 'react';
 
 declare module 'react-router' {
-  declare type RouterState = any;
+  declare type Hash = string;
+  declare type Action = 'PUSH' | 'REPLACE' | 'POP';
+  declare type Component = ReactClass<*> | string;
+  declare type Location = {
+    pathname: Pathname;
+    search: QueryString;
+    query: Query;
+    state: LocationState;
+    action: Action;
+    key: LocationKey;
+  };
+  declare type LocationDescriptorObject = {
+    pathname: Pathname;
+    search: Search;
+    query: Query;
+    state: LocationState;
+  };
+
+  declare type LocationDescriptor = LocationDescriptorObject | Path;
+  declare type LocationKey = string;
+
+  declare type Params = Object;
+  declare type Pathname = string;
+  declare type Query = Object;
+  declare type QueryString = string;
+
+  declare type Path = string;
+
+  declare type RouterState = {
+    location: Location;
+    routes: Array<RouteConfig>;
+    params: Params;
+    components: Array<Component>;
+  };
+
+  declare type RouteComponent = Component;
+  
+  declare type LocationState = ?Object;
   declare type RedirectFunction = (state: ?LocationState, pathname: string, query: string) => void;
   declare type EnterHook = (nextState: RouterState, replace: RedirectFunction, callback?: Function) => any;
   declare type LeaveHook = (prevState: RouterState) => any;
   declare type RouteConfig = {
     path?: string,
-    component?: React.Component<*, *, *>,
+    component?: RouteComponent,
     indexRoute?: RouteConfig,
     childRoutes?: Array<RouteConfig>,
     onEnter?: EnterHook,
@@ -29,6 +66,7 @@ declare module 'react-router' {
     useRouterHistory: (historyFactory: Function) => (options: ?Object) => Object;
     match: Function;
     RouterContext: React.Component<*, *, *>;
+    withRouter: (C: React.Component<*, *, *>) => React.Component<*, *, *>;
     createRoutes: (routes: React$Element<*>) => Array<Object>;
     formatPattern: (pattern: string, params: Object) => string;
   }
