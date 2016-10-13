@@ -1,14 +1,30 @@
 import React from 'react';
 
 declare module 'react-router' {
+  declare type RouterState = any;
+  declare type RedirectFunction = (state: ?LocationState, pathname: string, query: string) => void;
+  declare type EnterHook = (nextState: RouterState, replace: RedirectFunction, callback?: Function) => any;
+  declare type LeaveHook = (prevState: RouterState) => any;
+  declare type RouteConfig = {
+    path?: string,
+    component?: React.Component<*, *, *>,
+    indexRoute?: RouteConfig,
+    childRoutes?: Array<RouteConfig>,
+    onEnter?: EnterHook,
+    onLeave?: LeaveHook
+  };
+  declare type RouterProps = {
+    routes?: RouteConfig,
+    history?: any
+  };
   declare interface ReactRouter extends React.Component<*, *, *> {
     IndexRoute: React.Component<*, *, *>;
     Link: React.Component<*, *, *>;
     IndexLink: React.Component<*, *, *>;
     Redirect: React.Component<*, *, *>;
     IndexRedirect: React.Component<*, *, *>;
-    Route: React.Component<*, *, *>;
-    Router: React.Component<*, *, *>;
+    Route: React.Component<*, RouteConfig, *>;
+    Router: React.Component<*, RouterProps, *>;
     browserHistory: any;
     useRouterHistory: (historyFactory: Function) => (options: ?Object) => Object;
     match: Function;
