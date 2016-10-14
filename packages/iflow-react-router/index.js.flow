@@ -3,6 +3,7 @@ import React from 'react';
 declare module 'react-router' {
   declare type Hash = string;
   declare type Action = 'PUSH' | 'REPLACE' | 'POP';
+  declare type Search = string;
   declare type Component = ReactClass<*> | string;
   declare type Location = {
     pathname: Pathname;
@@ -39,11 +40,12 @@ declare module 'react-router' {
   declare type RouteComponent = Component;
   
   declare type LocationState = ?Object;
-  declare type RedirectFunction = (state: ?LocationState, pathname: string, query: string) => void;
+  declare type RedirectFunction = (L: LocationDescriptor) => void;
   declare type EnterHook = (nextState: RouterState, replace: RedirectFunction, callback?: Function) => any;
   declare type LeaveHook = (prevState: RouterState) => any;
   declare type RouteConfig = {
     path?: string,
+    pathName?: React$Element<*>|string,
     component?: RouteComponent,
     indexRoute?: RouteConfig,
     childRoutes?: Array<RouteConfig>,
@@ -53,6 +55,16 @@ declare module 'react-router' {
   declare type RouterProps = {
     routes?: RouteConfig,
     history?: any
+  };
+  declare type RouteHook = (nextLocation?: Location) => any;
+  declare type LocationRouter = {
+    push: (location: LocationDescriptor) => void;
+    replace: (location: LocationDescriptor) => void;
+    go: (n: number) => void;
+    goBack: () => void;
+    goForward: () => void;
+    setRouteLeaveHook: (route: RouteConfig, hook: RouteHook) => Function;
+    isActive: (location: LocationDescriptor, indexOnly: boolean) => void;
   };
   declare interface ReactRouter extends React.Component<*, *, *> {
     IndexRoute: React.Component<*, *, *>;
